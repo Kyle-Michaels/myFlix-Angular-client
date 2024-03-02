@@ -55,6 +55,7 @@ export class ProfilePageComponent {
     this.fetchApiData.editUser(this.userData).subscribe((result) => {
       console.log('Updated user:', result);
       localStorage.setItem('user', JSON.stringify(result));
+      this.getUserData();
       this.snackBar.open('User update successfull', 'OK', {
         duration: 2000
       });
