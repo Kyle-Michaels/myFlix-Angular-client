@@ -11,6 +11,10 @@ import { FetchApiDataService } from '../fetch-api-data.service';
 // Import to display notifications to the user
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+/**
+ * User Registration Form Component
+ */
+
 @Component({
   selector: 'app-user-registration-form',
   templateUrl: './user-registration-form.component.html',
@@ -18,7 +22,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class UserRegistrationFormComponent implements OnInit {
 
+  /**
+   * User registration data
+   */
+
   @Input() userData = { Username: '', Password: '', Email: '', Birthday: '' };
+
+  /**
+   * Constructor for UserRegistrationFormComponent
+   * @param fetchApiData - Handles Api requests
+   * @param dialogRef - References User Registration Dialog
+   * @param snackBar - Displays MatSnackBar messages
+   */
 
   constructor(
     public fetchApiData: FetchApiDataService,
@@ -30,6 +45,11 @@ export class UserRegistrationFormComponent implements OnInit {
   }
 
   /////////////////////////API CALL TO REGISTER USER////////////////////////
+
+  /**
+   * Handles user registration.
+   */
+
   registerUser(): void {
     this.fetchApiData.userRegistration(this.userData).subscribe((result) => {
       this.dialogRef.close(); // This will close the modal on success!

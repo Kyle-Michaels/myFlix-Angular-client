@@ -7,6 +7,9 @@ import { GenreDialogComponent } from 'src/app/genre-dialog/genre-dialog.componen
 import { DirectorDialogComponent } from 'src/app/director-dialog/director-dialog.component';
 import { SynopsisDialogComponent } from 'src/app/synopsis-dialog/synopsis-dialog.component';
 
+/**
+ * Profile Page Component
+ */
 
 @Component({
   selector: 'app-profile-page',
@@ -15,12 +18,28 @@ import { SynopsisDialogComponent } from 'src/app/synopsis-dialog/synopsis-dialog
 })
 export class ProfilePageComponent {
 
+  /**
+   * User data
+   */
+
   @Input() userData = { Username: '', Password: '', Email: '', Birthday: '' };
+
+  /**
+   * Component properties
+   */
 
   favoriteMovies: any[] = [];
   userFavs: any[] = [];
   movies: any[] = [];
   user: any = {}
+
+  /**
+   * Constructor for ProfilePageComponent
+   * @param fetchApiData - Handles Api requests
+   * @param router - Angular router for navigation
+   * @param snackBar - Displays MatSnackBar messages
+   * @param dialog - Opens dialog components
+   */
 
   constructor(
     public fetchApiData: FetchApiDataService,
@@ -28,6 +47,11 @@ export class ProfilePageComponent {
     public snackBar: MatSnackBar,
     public dialog: MatDialog
   ) { }
+
+  /**
+   * Angular lifecycle hook that initializes the component
+   * This method is called once component is initialized.
+   */
 
   ngOnInit(): void {
     this.getUserData();
@@ -37,10 +61,19 @@ export class ProfilePageComponent {
 
 
   /////////////////////////BUILD PAGE/////////////////////////
+
+  /**
+   * Gets user data
+   */
+
   getUserData(): void {
     this.user = this.fetchApiData.getUser();
     this.favoriteMovies = this.user.FavoriteMovies;
   }
+
+  /**
+   * Gets all movies and filters list to contain only favorite movies
+   */
 
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((response: any) => {
@@ -51,10 +84,16 @@ export class ProfilePageComponent {
 
 
   /////////////////////////UPDATE USER/////////////////////////
+
+  /**
+   * Updates user details
+   */
+
   updateUser(): void {
     this.fetchApiData.editUser(this.userData).subscribe((result) => {
       console.log('Updated user:', result);
       localStorage.setItem('user', JSON.stringify(result));
+      this.getUserData();
       this.snackBar.open('User update successfull', 'OK', {
         duration: 2000
       });
@@ -67,6 +106,13 @@ export class ProfilePageComponent {
 
 
   /////////////////////////OPEN DIALOGS/////////////////////////
+
+  /**
+   * Opens Genre Dialog
+   * @param {string} name - Genre name.
+   * @param {string} description - Genre description.
+   */
+
   openGenreDialog(name: string, description: string): void {
     this.dialog.open(GenreDialogComponent, {
       data: {
@@ -76,6 +122,13 @@ export class ProfilePageComponent {
       width: '500px'
     })
   }
+
+  /**
+   * Opens Director Dialog
+   * @param {string} name - Director name.
+   * @param {string} birth - Director birth data and/if death date.
+   * @param {string} bio - Director bio
+   */
 
   openDirectorDialog(name: string, birth: string, bio: string): void {
     this.dialog.open(DirectorDialogComponent, {
@@ -87,6 +140,12 @@ export class ProfilePageComponent {
       width: '500px'
     })
   }
+
+  /**
+   * Opens Synopsis Dialog
+   * @param {string} title - Movie title.
+   * @param {string} description - Movie description.
+   */
 
   openSynopsisDialog(title: string, description: string): void {
     this.dialog.open(SynopsisDialogComponent, {
@@ -100,10 +159,22 @@ export class ProfilePageComponent {
 
 
   /////////////////////////FAVORITE FUNCTIONS/////////////////////////
+
+  /**
+   * Check if movie is in user's favorite movies list.
+   * @param movie - Movie object containing movie data
+   * @returns true if movie is in user's favorite movies list
+   */
+
   isFav(movie: any): boolean {
     const user: any = this.fetchApiData.getUser()
     return user.FavoriteMovies.includes(movie._id) ? true : false
   }
+
+  /**
+   * Adds movie to user's favorite movies list.
+   * @param movie - Movie object containing movie data
+   */
 
   addToFavs(movie: any): void {
     this.fetchApiData.addToFavs(movie._id).subscribe((response) => {
@@ -111,6 +182,11 @@ export class ProfilePageComponent {
       localStorage.setItem('user', JSON.stringify(response));
     })
   }
+
+  /**
+   * Removes movie from user's favorite movies list.
+   * @param movie - Movie object containing movie data.
+   */
 
   removeFromFavs(movie: any): void {
     this.fetchApiData.removeFromFavs(movie._id).subscribe((response) => {
@@ -121,16 +197,30 @@ export class ProfilePageComponent {
     })
   }
 
+  /**
+   * Calls add or remove from favorites depending if movie is on user's favorite movies list.
+   * @param movie - Movie object containg movie data.
+   */
+
   toggleFav(movie: any): void {
     this.isFav(movie) ? this.removeFromFavs(movie) : this.addToFavs(movie)
   }
 
 
   /////////////////////////ROUTING/////////////////////////
+
+  /**
+   * Signs out user and re-directs to welcome page.
+   */
+
   signout(): void {
     localStorage.clear();
     this.router.navigate(['welcome'])
   }
+
+  /**
+   * Re-directs to home page.
+   */
 
   home(): void {
     this.router.navigate(['movies'])
