@@ -20,8 +20,7 @@ export class FetchApiDataService {
   public userRegistration(userDetails: any): Observable<any> {
     console.log(userDetails);
     return this.http.post(apiUrl + 'users', userDetails).pipe(
-      catchError(this.handleError)
-    );
+      catchError(this.handleError));
   }
 
   // Making the api call for the user login endpoint
@@ -94,25 +93,17 @@ export class FetchApiDataService {
   }
 
   // There is no api call for getting favorite movies for a user
-  getFavorites(username: any): Observable<any> {
-    const token = localStorage.getItem('token');
-    console.log(username);
-    return this.http.get(apiUrl + 'users/' + username + '/favorites', {
-      headers: new HttpHeaders({
-        Authorization: 'Bearer ' + token,
-      })
-    }).pipe(
-      map(this.extractResponseData),
-      catchError(this.handleError)
-    );
+  getFavorites(): Observable<any> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}')
+    const favs = user.FavoriteMovies;
+    return favs;
   }
 
   // Making the api call to add a movie to favorites
   addToFavs(movieID: any): Observable<any> {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const token = localStorage.getItem('token');
-    console.log(user, movieID);
-    return this.http.post(apiUrl + 'users/' + user.Username + '/movies/' + movieID, {
+    return this.http.post(apiUrl + 'users/' + user.Username + '/movies/' + movieID, null, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -123,10 +114,9 @@ export class FetchApiDataService {
   }
 
   // Making the api call to edit user
-  editUser(userDetails: any): Observable<any> {
+  editUser(userData: any): Observable<any> {
     const token = localStorage.getItem('token');
-    console.log(userDetails);
-    return this.http.put(apiUrl + 'users/' + userDetails.Username, {
+    return this.http.put(apiUrl + 'users/' + userData.Username, userData, {
       headers: new HttpHeaders({
         Authorization: 'Bearer ' + token,
       })
@@ -180,8 +170,9 @@ export class FetchApiDataService {
       console.error(
         `Error Status code ${error.status}, ` +
         `Error body is: ${error.error}`);
+      console.log(error.error)
     }
-    return throwError('Something bad happened; please try again later.');
+    return throwError(error.error);
   }
 
 }
