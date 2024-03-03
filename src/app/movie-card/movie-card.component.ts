@@ -1,12 +1,12 @@
 // src/app/movie-card/movie-card.component.ts
 
 import { Component, OnInit } from '@angular/core';
-import { FetchApiDataService } from 'src/app/fetch-api-data.service';
+import { FetchApiDataService } from '../fetch-api-data.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { GenreDialogComponent } from 'src/app/genre-dialog/genre-dialog.component';
-import { DirectorDialogComponent } from 'src/app/director-dialog/director-dialog.component';
-import { SynopsisDialogComponent } from 'src/app/synopsis-dialog/synopsis-dialog.component';
+import { GenreDialogComponent } from '../genre-dialog/genre-dialog.component';
+import { DirectorDialogComponent } from '../director-dialog/director-dialog.component';
+import { SynopsisDialogComponent } from '../synopsis-dialog/synopsis-dialog.component';
 
 /**
  * Movie Card Component
