@@ -1,3 +1,4 @@
+![preview](https://github.com/Kyle-Michaels/myFlix-Angular-client/blob/main/myFlixAngular.jpg?raw=true)
 # MyFlixAngularClient
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.12.
